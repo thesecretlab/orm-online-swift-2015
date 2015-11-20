@@ -432,11 +432,19 @@ if let barAsANumber = bar as? Int {
 // var maybeIntBar = bar as? Int
 //var maybeIntBar = bar as Int?
 
+// var maybeIntBar = bar! as Int
+// var maybeIntBar = bar as! Int
+// var maybeIntBar = bar as Int!
+
+
+// Overflow protection
 
 var maybeIntBar = bar as? Int
 
 var byte : UInt8 = 255
 byte &+ 1
+
+// Protocol extensions
 
 extension Driveable {
     func driveTo(destination:String) {
@@ -447,6 +455,133 @@ extension Driveable {
 extension String : Driveable {}
 
 "foo".driveTo("the moon")
+
+// Mapping
+
+let source = [1,2,4,8,16]
+
+//var timesTwo : [Int] = []
+//
+//for number in source {
+//    timesTwo.append(number * 2)
+//}
+
+let timesTwo = source.map { $0.description }
+
+let sum =
+source.reduce("") { $0.stringByAppendingString($1.description) }
+
+let divisibleByFour = source.filter {
+    $0 % 4 == 0
+}
+
+let sorted = source.sort( {
+    $0 > $1
+} )
+
+let translationDictionary = [
+    "Hello":"Bonjour",
+    "Goodbye":"Au revoir"
+]
+
+let filteredDictionary = translationDictionary.filter { (item) -> Bool in
+    return item.0.hasPrefix("H")
+}
+
+filteredDictionary
+
+let now = NSDate()
+
+// Date formatters
+
+let dateFormatter = NSDateFormatter()
+
+dateFormatter.locale = NSLocale(localeIdentifier: "fr")
+
+dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle
+dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle
+
+dateFormatter.stringFromDate(now)
+
+dateFormatter.dateFormat = "yyyy-MM-DD"
+
+dateFormatter.timeZone = NSTimeZone(name: "America/Los_Angeles")
+
+
+
+dateFormatter.dateFromString("2015-11-21")
+
+// Number formatters
+
+let numberFormatter = NSNumberFormatter()
+
+numberFormatter.numberStyle = .CurrencyStyle
+
+numberFormatter.currencySymbol = "@"
+
+numberFormatter.stringFromNumber(1234.56)
+
+let byteFormatter = NSByteCountFormatter()
+
+byteFormatter.countStyle = .Memory
+
+byteFormatter.stringFromByteCount(1000)
+
+byteFormatter.stringFromByteCount(0)
+
+// Functions embedded in other scopes
+if true {
+    
+    func foo() {
+        print("Foo!")
+    }
+    
+    foo()
+    
+}
+
+// Nesting types in types
+class ClassA {
+    class ClassB {
+        
+    }
+    
+    var x : ClassB?
+}
+
+
+var testString = "Hello, this is a string! It contains some Unicodè"
+
+testString.characters.count
+testString.utf8.count
+
+testString.uppercaseString
+testString.lowercaseString
+testString.capitalizedString
+
+// File management
+
+NSFileManager.defaultManager()
+
+import XCPlayground
+
+
+XCPlaygroundSharedDataDirectoryURL.absoluteString
+
+do {
+    let contents = try NSFileManager.defaultManager().contentsOfDirectoryAtURL(XCPlaygroundSharedDataDirectoryURL, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles)
+    
+    contents
+    
+    let firstFile = contents.first
+   
+
+} catch let error as NSError {
+    print("Error: \(error)")
+}
+
+
+
 
 
 
