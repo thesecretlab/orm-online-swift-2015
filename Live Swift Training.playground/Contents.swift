@@ -42,6 +42,27 @@ var myTuple = (numberOfSheep:1,numberOfGoats:2,"hi")
 
 myTuple.numberOfGoats
 
+// Unicode and emoji!
+let è = "foo"
+
+let 🐱 = "cat"
+let 🐭 = "mouse"
+
+🐱==🐭
+
+
+//: Sets
+
+
+
+
+/* 
+
+sdsd
+
+/* foo */
+
+*/
 var mySet : Set<Int> = [1,1,2]
 
 func test() {
@@ -130,10 +151,28 @@ obj.foo()
 
 class Car {
     
-    private var speed : Int
+    private var speedKPH : Int {
+        willSet {
+            print("About to change to \(newValue) from \(speedKPH)")
+            
+        }
+        didSet {
+            print ("Changed from \(oldValue) to \(speedKPH)")
+        }
+    }
+    
+    // Computed properties
+    var speedMPH : Float {
+        get {
+            return Float(speedKPH) * 0.62
+        }
+        set {
+            speedKPH = Int(newValue * 1.61)
+        }
+    }
     
     init (speed : Int) {
-        self.speed = speed
+        self.speedKPH = speed
     }
     
     convenience init() {
@@ -146,13 +185,16 @@ class Car {
     
 }
 
+
 let myCar = Car(speed: 45)
-myCar.speed = 45
+myCar.speedKPH = 45
 
 var myOtherCar = myCar
-myOtherCar.speed = 60
-myCar.speed
+myOtherCar.speedKPH = 60
+myCar.speedKPH
 
+myCar.speedMPH = 40
+myCar.speedKPH
 
 struct Name {
     var firstName : String
@@ -173,9 +215,196 @@ extension String {
 
 "Hello".reverse()
 
+// Error handling
+var data = "My Text".dataUsingEncoding(NSUTF8StringEncoding)
+try? data?.writeToFile("/invalid/path", options: NSDataWritingOptions.DataWritingAtomic)
+
+do {
+    var data = "My Text".dataUsingEncoding(NSUTF8StringEncoding)
+
+    try data?.writeToFile("/invalid/path", options: NSDataWritingOptions.DataWritingAtomic)
+} catch var error as NSError {
+    print("There was an error!")
+}
+
+// Defer
+func deferExample() -> UIImage {
+    
+    UIGraphicsBeginImageContext(CGSize(width: 100, height: 100))
+    
+    defer {
+        UIGraphicsEndImageContext()
+    }
+    
+    
+    let myImage = UIGraphicsGetImageFromCurrentImageContext()
+    
+    
+    
+    return myImage
+    
+}
+
+let temporaryMemory = malloc(100)
+defer {
+    free(temporaryMemory)
+}
+
+// Use temporaryMemory
+
+// Protocols
+
+protocol Driveable {
+    func driveTo(destination:String)
+    
+}
+
+class Motorcycle : Driveable {
+    
+    func driveTo(destination: String) {
+        print("Motorcycle driving to \(destination)")
+    }
+    
+}
+
+extension Car : Driveable {
+    func driveTo(destination: String) {
+        print("Car driving to \(destination)")
+    }
+}
+
+// Generics
+
+let setOfNumbers : Set<Int> 
+
+class Tree<T : Equatable> {
+    
+    var data : T?
+    
+    var children : [Tree<T>] = []
+    
+    func addChild(newValue : T) -> Tree<T> {
+        let newNode = Tree<T>()
+        newNode.data = newValue
+        self.children.append(newNode)
+        return newNode
+    }
+    
+    func findNode(thingToFind : T) -> Tree<T>? {
+        if data == thingToFind {
+            return self
+        }
+        
+        for child in children {
+            if let result = child.findNode(thingToFind) {
+                return result
+            }
+        }
+        
+        return nil
+    }
+    
+}
+
+let intTree = Tree<Int>()
+intTree.data = 5
+intTree.addChild(2)
+intTree.addChild(6)
 
 
+//    5
+//   / \
+//  2   6
 
+intTree.findNode(8)
+
+let stringTree = Tree<String>()
+
+// Defining collection types
+let myDictionaryOfStrings : [Int:String]
+
+// Enums
+
+enum CompassPoint {
+    case North
+    case South
+    case East
+    case West
+}
+
+var myDirection : CompassPoint
+
+myDirection = .North
+
+enum Planet : Int {
+    case Mercury = 1, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
+    
+}
+
+var myPlanet = Planet.Mars
+
+var myOtherPlanet = Planet(rawValue: 9)
+
+myPlanet.rawValue
+
+enum Beverage {
+    case Tea(milk: Bool, sugars:Int)
+    case Coffee(milk:Bool, sugars:Int)
+    case Soda(name:String)
+    
+}
+
+// Loop without caring about the specific item
+for _ in [1,2,3,5] {
+    print("Found an item")
+}
+
+// Discard
+_ = 23
+
+var thisMorningsDrink = Beverage.Coffee(milk: false, sugars: 9)
+
+switch thisMorningsDrink {
+case .Coffee(false,_):
+    print("It's black coffee")
+    
+case .Coffee:
+    print("It's coffee")
+case .Tea:
+    ()
+case .Soda:
+    ()
+    
+}
+
+// + - / *
+
+let point1 = CGPoint(x: 2, y: 2)
+let point2 = CGPoint(x: 3, y: 3)
+
+func + (left:CGPoint, right:CGPoint) -> CGPoint {
+    return CGPoint(x: left.x+right.x,
+        y: left.y+right.y)
+}
+
+let point3 = point1 + point2
+
+infix operator ** { associativity left precedence 160 }
+
+func ** (left: Double, right: Double) -> Double {
+    return pow(left, right)
+}
+
+9**3
+
+// Literal convertibles
+/*extension String : IntegerLiteralConvertible {
+    init(integerLiteral value: Self.IntegerLiteralType) {
+        self = value.description
+    }
+}
+
+var myStringFromAnInteger : String = 42 */
 
 
 
