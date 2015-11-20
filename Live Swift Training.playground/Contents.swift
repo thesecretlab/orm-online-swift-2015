@@ -395,8 +395,6 @@ func ** (left: Double, right: Double) -> Double {
     return pow(left, right)
 }
 
-9**3
-
 // Literal convertibles
 /*extension String : IntegerLiteralConvertible {
     init(integerLiteral value: Self.IntegerLiteralType) {
@@ -405,6 +403,53 @@ func ** (left: Double, right: Double) -> Double {
 }
 
 var myStringFromAnInteger : String = 42 */
+
+// Pattern matching on types
+var foo = 4
+
+switch foo {
+case 4 as Int:
+    print("It's 4 as an integer")
+case 4 as Double:
+    print("It's 4 as a double")
+case is Int:
+    print("Foo is an integer")
+default:
+    ()
+}
+
+// Type checking
+var bar : AnyObject
+
+bar = "foo"
+bar = 23.0
+
+if let barAsANumber = bar as? Int {
+    print("it's the integer \(barAsANumber)")
+}
+
+//var maybeIntBar = bar? as Int
+// var maybeIntBar = bar as? Int
+//var maybeIntBar = bar as Int?
+
+
+var maybeIntBar = bar as? Int
+
+var byte : UInt8 = 255
+byte &+ 1
+
+extension Driveable {
+    func driveTo(destination:String) {
+        print("Something is driving to \(destination)")
+    }
+}
+
+extension String : Driveable {}
+
+"foo".driveTo("the moon")
+
+
+
 
 
 
