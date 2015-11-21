@@ -521,6 +521,8 @@ numberFormatter.currencySymbol = "@"
 
 numberFormatter.stringFromNumber(1234.56)
 
+numberFormatter.numberFromString("@87123786123")
+
 let byteFormatter = NSByteCountFormatter()
 
 byteFormatter.countStyle = .Memory
@@ -542,6 +544,14 @@ if true {
 
 // Nesting types in types
 class ClassA {
+    
+    
+    static var classString = "Hello"
+    
+    class func doSomething() {
+        
+    }
+    
     class ClassB {
         
     }
@@ -549,6 +559,9 @@ class ClassA {
     var x : ClassB?
 }
 
+ClassA.classString = "Goodbye"
+
+ClassA.doSomething()
 
 var testString = "Hello, this is a string! It contains some Unicodè"
 
@@ -562,6 +575,8 @@ testString.capitalizedString
 // File management
 
 NSFileManager.defaultManager()
+
+
 
 import XCPlayground
 
@@ -579,6 +594,23 @@ do {
 } catch let error as NSError {
     print("Error: \(error)")
 }
+
+let debug_mode = true
+
+assert(1+1 == 2)
+
+func assert( @autoclosure condition : () -> Bool ) {
+    if debug_mode == false {
+        
+        return
+    }
+    
+    if condition() == false {
+        // panic, shut down, set computer on fire
+    }
+    
+}
+
 
 
 
